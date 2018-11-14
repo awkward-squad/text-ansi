@@ -54,8 +54,7 @@ import qualified Text.Builder as Builder
 -- Please don't be put off by the lack of documentation, there's not much to
 -- say ;)
 --
--- Supports foreground color, background color, bold style, and underlined
--- style.
+-- Supports foreground color, background color, bold, and underline.
 
 black, red, green, yellow, blue, magenta, cyan, white, brightBlack, brightRed,
   brightGreen, brightYellow, brightBlue, brightMagenta, brightCyan,
