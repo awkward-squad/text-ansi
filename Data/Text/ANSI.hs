@@ -1,6 +1,6 @@
 {-# language OverloadedStrings #-}
 
-module Data.Text.Color
+module Data.Text.ANSI
   ( -- $intro
 
     -- * Foreground color
