@@ -53,6 +53,7 @@ module Data.Text.ANSI
   , overline
   ) where
 
+import Data.Semigroup ((<>))
 import Data.Text
 import Data.Word (Word8)
 import Foreign.C (CInt(CInt))
