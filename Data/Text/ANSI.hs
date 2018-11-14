@@ -12,7 +12,6 @@ module Data.Text.ANSI
   , magenta
   , cyan
   , white
-  , rgb
   , brightBlack
   , brightRed
   , brightGreen
@@ -21,6 +20,7 @@ module Data.Text.ANSI
   , brightMagenta
   , brightCyan
   , brightWhite
+  , rgb
 
     -- * Background color
   , blackBg
@@ -31,7 +31,6 @@ module Data.Text.ANSI
   , magentaBg
   , cyanBg
   , whiteBg
-  , rgbBg
   , brightBlackBg
   , brightRedBg
   , brightGreenBg
@@ -40,6 +39,7 @@ module Data.Text.ANSI
   , brightMagentaBg
   , brightCyanBg
   , brightWhiteBg
+  , rgbBg
 
     -- * Style
   , bold
@@ -63,9 +63,16 @@ import qualified Text.Builder as Builder
 
 -- $intro
 --
--- Text styling for ANSI terminals. Supports foreground/background color,
--- bold/faint intensity, italic, underline, strikethrough, frame, encircle, and
--- overline escape sequences. Some styles may not work on your terminal.
+-- Text styling for ANSI terminals using SGR codes, as defined by the
+-- <https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf ECMA-48>
+-- standard.
+--
+-- Supports foreground\/background color, bold\/faint intensity, italic,
+-- single\/double underline, strikethrough, frame, encircle, and overline escape
+-- sequences. Some styles may not work on your terminal.
+--
+-- Also features terminal detection, so redirecting styled output to a file will
+-- automatically strip the ANSI escape sequences.
 
 {-# INLINABLE black           #-}
 {-# INLINABLE red             #-}
@@ -109,39 +116,72 @@ black, red, green, yellow, blue, magenta, cyan, white, brightBlack, brightRed,
   brightMagentaBg, brightCyanBg,
   brightWhiteBg :: Text -> Text
 
+-- | Black foreground.
 black           = surround "30"  "39"
+-- | Red foreground.
 red             = surround "31"  "39"
+-- | Green foreground.
 green           = surround "32"  "39"
+-- | Yellow foreground.
 yellow          = surround "33"  "39"
+-- | Blue foreground.
 blue            = surround "34"  "39"
+-- | Magenta foreground.
 magenta         = surround "35"  "39"
+-- | Cyan foreground.
 cyan            = surround "36"  "39"
+-- | White foreground.
 white           = surround "37"  "39"
+-- | Bright black foreground.
 brightBlack     = surround "90"  "39"
+-- | Bright red foreground.
 brightRed       = surround "91"  "39"
+-- | Bright green foreground.
 brightGreen     = surround "92"  "39"
+-- | Bright yellow foreground.
 brightYellow    = surround "93"  "39"
+-- | Bright blue foreground.
 brightBlue      = surround "94"  "39"
+-- | Bright magenta foreground.
 brightMagenta   = surround "95"  "39"
+-- | Bright cyan foreground.
 brightCyan      = surround "96"  "39"
+-- | Bright white foreground.
 brightWhite     = surround "97"  "39"
+-- | Black background.
 blackBg         = surround "40"  "49"
+-- | Red background.
 redBg           = surround "41"  "49"
+-- | Green background.
 greenBg         = surround "42"  "49"
+-- | Yellow background.
 yellowBg        = surround "43"  "49"
+-- | Blue background.
 blueBg          = surround "44"  "49"
+-- | Magenta background.
 magentaBg       = surround "45"  "49"
+-- | Cyan background.
 cyanBg          = surround "46"  "49"
+-- | White background.
 whiteBg         = surround "47"  "49"
+-- | Bright black background.
 brightBlackBg   = surround "100" "49"
+-- | Bright red background.
 brightRedBg     = surround "101" "49"
+-- | Bright green background.
 brightGreenBg   = surround "102" "49"
+-- | Bright yellow background.
 brightYellowBg  = surround "103" "49"
+-- | Bright blue background.
 brightBlueBg    = surround "104" "49"
+-- | Bright magenta background.
 brightMagentaBg = surround "105" "49"
+-- | Bright cyan background.
 brightCyanBg    = surround "106" "49"
+-- | Bright white background.
 brightWhiteBg   = surround "107" "49"
 
+-- | RGB foreground.
 {-# INLINABLE rgb #-}
 rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
 rgb r g b =
@@ -154,6 +194,7 @@ rgb r g b =
      Builder.unsignedDecimal b)
     "39"
 
+-- | RGB background.
 {-# INLINABLE rgbBg #-}
 rgbBg :: Word8 -> Word8 -> Word8 -> Text -> Text
 rgbBg r g b =
@@ -179,26 +220,28 @@ rgbBg r g b =
 bold, faint, italic, underline, doubleUnderline, strikethrough, frame,
   encircle, overline :: Text -> Text
 
+-- | __Bold__ style (high intensity).
 bold            = surround "1"  "22"
+-- | Faint style (low intensity).
 faint           = surround "2"  "22"
+-- | /Italic/ style.
 italic          = surround "3"  "32"
+-- | U̲n̲d̲e̲r̲l̲i̲n̲e̲ style.
 underline       = surround "4"  "24"
+-- | D̳o̳u̳b̳l̳e̳ ̳u̳n̳d̳e̳r̳l̳i̳n̳e̳ style.
 doubleUnderline = surround "21" "24"
+-- | S̶t̶r̶i̶k̶e̶t̶h̶r̶o̶u̶g̶h̶ style.
 strikethrough   = surround "9"  "29"
+-- | Frame style.
 frame           = surround "51" "54"
+-- | Encircle style.
 encircle        = surround "52" "54"
+-- | O̅v̅e̅r̅l̅i̅n̅e̅ style.
 overline        = surround "53" "55"
 
 
+
 --------------------------------------------------------------------------------
-
-{-# NOINLINE isatty #-}
-isatty :: Bool
-isatty =
-  unsafePerformIO (c_isatty 1) == 1
-
-foreign import ccall unsafe "isatty"
-  c_isatty :: CInt -> IO CInt
 
 -- Don't inline before phase 1
 {-# NOINLINE [1] surround #-}
@@ -213,6 +256,14 @@ esc = "\ESC["
 m, semi :: Builder
 m    = Builder.char 'm'
 semi = Builder.char ';'
+
+{-# NOINLINE isatty #-}
+isatty :: Bool
+isatty =
+  unsafePerformIO (c_isatty 1) == 1
+
+foreign import ccall unsafe "isatty"
+  c_isatty :: CInt -> IO CInt
 
 -- Collapse surround/surround to a single surround before phase 1
 {-# RULES
