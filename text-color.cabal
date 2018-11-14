@@ -1,0 +1,39 @@
+cabal-version: 2.2
+
+name: text-color
+version: 0.1.0
+category: Data
+synopsis: Color and style text for ANSI terminals.
+description:
+  Text-styling functionality carved out of @ansi-terminal@.
+author: Mitchell Rosen
+maintainer: Mitchell Rosen <mitchellwrosen@gmail.com>
+homepage: https://github.com/mitchellwrosen/text-color
+bug-reports: https://github.com/mitchellwrosen/text-color/issues
+copyright: (c) 2018, Mitchell Rosen
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.2
+
+extra-source-files:
+  .travis.yml
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: git://github.com/mitchellwrosen/text-color.git
+
+library
+  build-depends:
+      base ^>= 4.10 || ^>= 4.11 || ^>= 4.12
+    , text ^>= 1.0 || ^>= 1.1 || ^>= 1.2
+    , text-builder ^>= 0.6
+  default-language:
+    Haskell2010
+  exposed-modules:
+    Data.Text.Color
+  ghc-options:
+    -Wall
+    -Wcompat
