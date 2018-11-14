@@ -1,4 +1,4 @@
-{-# language OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Data.Text.ANSI
   ( -- $intro
@@ -12,6 +12,7 @@ module Data.Text.ANSI
   , magenta
   , cyan
   , white
+  , rgb
   , brightBlack
   , brightRed
   , brightGreen
@@ -30,6 +31,7 @@ module Data.Text.ANSI
   , magentaBg
   , cyanBg
   , whiteBg
+  , rgbBg
   , brightBlackBg
   , brightRedBg
   , brightGreenBg
@@ -41,10 +43,18 @@ module Data.Text.ANSI
 
     -- * Style
   , bold
-  , underlined
+  , faint
+  , italic
+  , underline
+  , doubleUnderline
+  , strikethrough
+  , frame
+  , encircle
+  , overline
   ) where
 
 import Data.Text
+import Data.Word (Word8)
 import Text.Builder (Builder)
 
 import qualified Text.Builder as Builder
@@ -52,9 +62,11 @@ import qualified Text.Builder as Builder
 -- $intro
 --
 -- Please don't be put off by the lack of documentation, there's not much to
--- say ;)
+-- say about each individual function ;)
 --
--- Supports foreground color, background color, bold, and underline.
+-- Supports foreground/background color, bold/faint intensity, italic,
+-- underline, strikethrough, frame, encircle, and overline escape sequences.
+-- Some styles may not work on your terminal.
 
 black, red, green, yellow, blue, magenta, cyan, white, brightBlack, brightRed,
   brightGreen, brightYellow, brightBlue, brightMagenta, brightCyan,
@@ -98,9 +110,37 @@ brightMagentaBg = bg "105"
 brightCyanBg    = bg "106"
 brightWhiteBg   = bg "107"
 
-bold, underlined :: Text -> Text
-bold       = surround "1" "22"
-underlined = surround "4" "24"
+rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
+rgb r g b =
+  fg
+    ("38;2;" <>
+     Builder.unsignedDecimal r <>
+     semi <>
+     Builder.unsignedDecimal g <>
+     semi <>
+     Builder.unsignedDecimal b)
+
+rgbBg :: Word8 -> Word8 -> Word8 -> Text -> Text
+rgbBg r g b =
+  bg
+    ("48;2;" <>
+     Builder.unsignedDecimal r <>
+     semi <>
+     Builder.unsignedDecimal g <>
+     semi <>
+     Builder.unsignedDecimal b)
+
+bold, faint, italic, underline, doubleUnderline, strikethrough, frame,
+  encircle, overline :: Text -> Text
+bold            = surround "1"  "22"
+faint           = surround "2"  "22"
+italic          = surround "3"  "32"
+underline       = surround "4"  "24"
+doubleUnderline = surround "21" "24"
+strikethrough   = surround "9"  "29"
+frame           = surround "51" "54"
+encircle        = surround "52" "54"
+overline        = surround "53" "55"
 
 
 --------------------------------------------------------------------------------
@@ -114,9 +154,8 @@ surround open close text =
   Builder.run (esc <> open <> m <> Builder.text text <> esc <> close <> m)
 
 esc :: Builder
-esc =
-  "\ESC["
+esc = "\ESC["
 
-m :: Builder
-m =
-  Builder.char 'm'
+m, semi :: Builder
+m    = Builder.char 'm'
+semi = Builder.char ';'
