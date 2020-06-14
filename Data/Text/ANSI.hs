@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Data.Text.ANSI
@@ -53,7 +54,9 @@ module Data.Text.ANSI
   , overline
   ) where
 
+#if ! MIN_VERSION_base (4,13,0)
 import Data.Semigroup ((<>))
+#endif
 import Data.Text
 import Data.Word (Word8)
 import Foreign.C (CInt(CInt))

@@ -23,7 +23,7 @@ copyright: (c) 2018, Mitchell Rosen
 license: BSD-3-Clause
 license-file: LICENSE
 build-type: Simple
-tested-with: GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.2
+tested-with: GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.2, GHC == 8.8.3, GHC == 8.10.1
 
 extra-source-files:
   .travis.yml
@@ -36,7 +36,7 @@ source-repository head
 
 library
   build-depends:
-      base ^>= 4.10 || ^>= 4.11 || ^>= 4.12
+      base ^>= 4.10 || ^>= 4.11 || ^>= 4.12 || ^>= 4.13 || ^>= 4.14
     , text ^>= 1.0 || ^>= 1.1 || ^>= 1.2
     , text-builder ^>= 0.6
   default-language:
