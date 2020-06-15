@@ -58,12 +58,13 @@ module Data.Text.ANSI
 import Data.Semigroup ((<>))
 #endif
 import Data.Text
+import Data.Text.Lazy.Builder (Builder)
 import Data.Word (Word8)
 import Foreign.C (CInt(CInt))
 import System.IO.Unsafe (unsafePerformIO)
-import Text.Builder (Builder)
-
-import qualified Text.Builder as Builder
+import qualified Data.Text.Lazy as Text.Lazy
+import qualified Data.Text.Lazy.Builder as Builder
+import qualified Data.Text.Lazy.Builder.Int as Builder
 
 -- $intro
 --
@@ -191,11 +192,11 @@ rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
 rgb r g b =
   surround
     ("38;2;" <>
-     Builder.unsignedDecimal r <>
+     Builder.decimal r <>
      semi <>
-     Builder.unsignedDecimal g <>
+     Builder.decimal g <>
      semi <>
-     Builder.unsignedDecimal b)
+     Builder.decimal b)
     "39"
 
 -- | RGB background.
@@ -204,11 +205,11 @@ rgbBg :: Word8 -> Word8 -> Word8 -> Text -> Text
 rgbBg r g b =
   surround
     ("48;2;" <>
-     Builder.unsignedDecimal r <>
+     Builder.decimal r <>
      semi <>
-     Builder.unsignedDecimal g <>
+     Builder.decimal g <>
      semi <>
-     Builder.unsignedDecimal b)
+     Builder.decimal b)
     "49"
 
 {-# INLINABLE bold            #-}
@@ -251,15 +252,15 @@ overline        = surround "53" "55"
 {-# NOINLINE [1] surround #-}
 surround :: Builder -> Builder -> Text -> Text
 surround open close text
-  | isatty = Builder.run (esc <> open <> m <> Builder.text text <> esc <> close <> m)
+  | isatty = Text.Lazy.toStrict (Builder.toLazyText (esc <> open <> m <> Builder.fromText text <> esc <> close <> m))
   | otherwise = text
 
 esc :: Builder
 esc = "\ESC["
 
 m, semi :: Builder
-m    = Builder.char 'm'
-semi = Builder.char ';'
+m    = Builder.singleton 'm'
+semi = Builder.singleton ';'
 
 {-# NOINLINE isatty #-}
 isatty :: Bool
