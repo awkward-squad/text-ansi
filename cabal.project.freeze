@@ -1,0 +1,6 @@
+constraints: any.array ==0.5.4.0,
+             any.binary ==0.8.8.0,
+             any.bytestring ==0.10.10.0,
+             any.containers ==0.6.2.1,
+             any.deepseq ==1.4.4.0,
+             any.rts ==1.0

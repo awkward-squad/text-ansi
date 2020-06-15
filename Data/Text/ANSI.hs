@@ -54,7 +54,7 @@ module Data.Text.ANSI
   , overline
   ) where
 
-#if ! MIN_VERSION_base (4,13,0)
+#if !MIN_VERSION_base(4,13,0)
 import Data.Semigroup ((<>))
 #endif
 import Data.Text
