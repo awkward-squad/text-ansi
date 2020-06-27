@@ -30,7 +30,7 @@ jobs:
             ~/.cabal/config
             ~/.cabal/packages/hackage.haskell.org/
             ~/.cabal/store
-          key: ${{ runner.os }}-${{ matrix.ghc }}-cabal-${{ hashFiles('cabal.project') }}-${{ hashFiles('cabal.project.freeze') }}
+          key: ${{ runner.os }}-${{ matrix.ghc }}-cabal-${{ hashFiles('cabal.project') }}
           restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-cabal-
 
       - uses: actions/cache@v2
