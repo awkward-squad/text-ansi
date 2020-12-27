@@ -83,205 +83,216 @@ import System.IO.Unsafe (unsafePerformIO)
 -- | Black foreground.
 black :: Text -> Text
 black =
-  surround "30" "39"
+  foreground "30"
 {-# INLINEABLE black #-}
 
 -- | Red foreground.
 red :: Text -> Text
 red =
-  surround "31" "39"
+  foreground "31"
 {-# INLINEABLE red #-}
 
 -- | Green foreground.
 green :: Text -> Text
 green =
-  surround "32" "39"
+  foreground "32"
 {-# INLINEABLE green #-}
 
 -- | Yellow foreground.
 yellow :: Text -> Text
 yellow =
-  surround "33" "39"
+  foreground "33"
 {-# INLINEABLE yellow #-}
 
 -- | Blue foreground.
 blue :: Text -> Text
 blue =
-  surround "34" "39"
+  foreground "34"
 {-# INLINEABLE blue #-}
 
 -- | Magenta foreground.
 magenta :: Text -> Text
 magenta =
-  surround "35" "39"
+  foreground "35"
 {-# INLINEABLE magenta #-}
 
 -- | Cyan foreground.
 cyan :: Text -> Text
 cyan =
-  surround "36" "39"
+  foreground "36"
 {-# INLINEABLE cyan #-}
 
 -- | White foreground.
 white :: Text -> Text
 white =
-  surround "37" "39"
+  foreground "37"
 {-# INLINEABLE white #-}
 
 -- | Bright black foreground.
 brightBlack :: Text -> Text
 brightBlack =
-  surround "90" "39"
+  foreground "90"
 {-# INLINEABLE brightBlack #-}
 
 -- | Bright red foreground.
 brightRed :: Text -> Text
 brightRed =
-  surround "91" "39"
+  foreground "91"
 {-# INLINEABLE brightRed #-}
 
 -- | Bright green foreground.
 brightGreen :: Text -> Text
 brightGreen =
-  surround "92" "39"
+  foreground "92"
 {-# INLINEABLE brightGreen #-}
 
 -- | Bright yellow foreground.
 brightYellow :: Text -> Text
 brightYellow =
-  surround "93" "39"
+  foreground "93"
 {-# INLINEABLE brightYellow #-}
 
 -- | Bright blue foreground.
 brightBlue :: Text -> Text
 brightBlue =
-  surround "94" "39"
+  foreground "94"
 {-# INLINEABLE brightBlue #-}
 
 -- | Bright magenta foreground.
 brightMagenta :: Text -> Text
 brightMagenta =
-  surround "95" "39"
+  foreground "95"
 {-# INLINEABLE brightMagenta #-}
 
 -- | Bright cyan foreground.
 brightCyan :: Text -> Text
 brightCyan =
-  surround "96" "39"
+  foreground "96"
 {-# INLINEABLE brightCyan #-}
 
 -- | Bright white foreground.
 brightWhite :: Text -> Text
 brightWhite =
-  surround "97" "39"
+  foreground "97"
 {-# INLINEABLE brightWhite #-}
+
+-- | RGB foreground.
+rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
+rgb r g b =
+  foreground ("38;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b)
+{-# INLINEABLE rgb #-}
+
+foreground :: Builder -> Text -> Text
+foreground s =
+  surround s "39"
+{-# INLINE foreground #-}
 
 -- | Black background.
 blackBg :: Text -> Text
 blackBg =
-  surround "40" "49"
+  background "40"
 {-# INLINEABLE blackBg #-}
 
 -- | Red background.
 redBg :: Text -> Text
 redBg =
-  surround "41" "49"
+  background "41"
 {-# INLINEABLE redBg #-}
 
 -- | Green background.
 greenBg :: Text -> Text
 greenBg =
-  surround "42" "49"
+  background "42"
 {-# INLINEABLE greenBg #-}
 
 -- | Yellow background.
 yellowBg :: Text -> Text
 yellowBg =
-  surround "43" "49"
+  background "43"
 {-# INLINEABLE yellowBg #-}
 
 -- | Blue background.
 blueBg :: Text -> Text
 blueBg =
-  surround "44" "49"
+  background "44"
 {-# INLINEABLE blueBg #-}
 
 -- | Magenta background.
 magentaBg :: Text -> Text
 magentaBg =
-  surround "45" "49"
+  background "45"
 {-# INLINEABLE magentaBg #-}
 
 -- | Cyan background.
 cyanBg :: Text -> Text
 cyanBg =
-  surround "46" "49"
+  background "46"
 {-# INLINEABLE cyanBg #-}
 
 -- | White background.
 whiteBg :: Text -> Text
 whiteBg =
-  surround "47" "49"
+  background "47"
 {-# INLINEABLE whiteBg #-}
 
 -- | Bright black background.
 brightBlackBg :: Text -> Text
 brightBlackBg =
-  surround "100" "49"
+  background "100"
 {-# INLINEABLE brightBlackBg #-}
 
 -- | Bright red background.
 brightRedBg :: Text -> Text
 brightRedBg =
-  surround "101" "49"
+  background "101"
 {-# INLINEABLE brightRedBg #-}
 
 -- | Bright green background.
 brightGreenBg :: Text -> Text
 brightGreenBg =
-  surround "102" "49"
+  background "102"
 {-# INLINEABLE brightGreenBg #-}
 
 -- | Bright yellow background.
 brightYellowBg :: Text -> Text
 brightYellowBg =
-  surround "103" "49"
+  background "103"
 {-# INLINEABLE brightYellowBg #-}
 
 -- | Bright blue background.
 brightBlueBg :: Text -> Text
 brightBlueBg =
-  surround "104" "49"
+  background "104"
 {-# INLINEABLE brightBlueBg #-}
 
 -- | Bright magenta background.
 brightMagentaBg :: Text -> Text
 brightMagentaBg =
-  surround "105" "49"
+  background "105"
 {-# INLINEABLE brightMagentaBg #-}
 
 -- | Bright cyan background.
 brightCyanBg :: Text -> Text
 brightCyanBg =
-  surround "106" "49"
+  background "106"
 {-# INLINEABLE brightCyanBg #-}
 
 -- | Bright white background.
 brightWhiteBg :: Text -> Text
 brightWhiteBg =
-  surround "107" "49"
+  background "107"
 {-# INLINEABLE brightWhiteBg #-}
 
--- | RGB foreground.
-rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
-rgb r g b =
-  surround ("38;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b) "39"
-{-# INLINEABLE rgb #-}
+background :: Builder -> Text -> Text
+background s =
+  surround s "49"
+{-# INLINE background #-}
 
 -- | RGB background.
 rgbBg :: Word8 -> Word8 -> Word8 -> Text -> Text
 rgbBg r g b =
-  surround ("48;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b) "49"
+  background ("48;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b)
+{-# INLINEABLE rgbBg #-}
 
 -- | __Bold__ style (high intensity).
 bold :: Text -> Text
@@ -298,7 +309,7 @@ faint =
 -- | /Italic/ style.
 italic :: Text -> Text
 italic =
-  surround "3" "32"
+  surround "3" "23"
 {-# INLINEABLE italic #-}
 
 -- | U̲n̲d̲e̲r̲l̲i̲n̲e̲ style.
@@ -339,11 +350,11 @@ overline =
 
 --------------------------------------------------------------------------------
 
--- Don't inline before phase 1
 surround :: Builder -> Builder -> Text -> Text
 surround open close text
   | isatty = Text.Lazy.toStrict (Builder.toLazyText (esc <> open <> m <> Builder.fromText text <> esc <> close <> m))
   | otherwise = text
+-- Don't inline before phase 1
 {-# NOINLINE [1] surround #-}
 
 esc :: Builder

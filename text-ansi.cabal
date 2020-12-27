@@ -1,7 +1,7 @@
 cabal-version: 2.2
 
 name: text-ansi
-version: 0.1.0.1
+version: 0.1.0.2
 category: Data
 synopsis: Text styling for ANSI terminals.
 description:
@@ -19,14 +19,13 @@ author: Mitchell Rosen
 maintainer: Mitchell Rosen <mitchellwrosen@gmail.com>
 homepage: https://github.com/mitchellwrosen/text-ansi
 bug-reports: https://github.com/mitchellwrosen/text-ansi/issues
-copyright: (c) 2018, Mitchell Rosen
+copyright: (c) 2018-2020, Mitchell Rosen
 license: BSD-3-Clause
 license-file: LICENSE
 build-type: Simple
 
 extra-source-files:
   cabal.project
-  cabal.project.freeze
   CHANGELOG.md
   README.md
 
