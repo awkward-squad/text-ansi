@@ -1,5 +1,1 @@
 packages: .
-index-state: 2020-06-14T23:29:31Z
-
-package text-ansi
-  ghc-options: -Werror
