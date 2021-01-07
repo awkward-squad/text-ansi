@@ -1,7 +1,7 @@
 cabal-version: 2.2
 
 name: text-ansi
-version: 0.1.0.2
+version: 0.1.1
 category: Data
 synopsis: Text styling for ANSI terminals.
 description:
@@ -41,6 +41,7 @@ library
     Haskell2010
   exposed-modules:
     Data.Text.ANSI
+    Data.Text.Builder.ANSI
   ghc-options:
     -Weverything
     -Wno-implicit-prelude

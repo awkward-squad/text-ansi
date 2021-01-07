@@ -1,4 +1,7 @@
-module Data.Text.ANSI
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Data.Text.Builder.ANSI
   ( -- $intro
 
     -- * Foreground color
@@ -52,12 +55,15 @@ module Data.Text.ANSI
   )
 where
 
-import Data.Text (Text)
-import qualified Data.Text.Builder.ANSI as Builder.ANSI
-import qualified Data.Text.Lazy as Text.Lazy
+#if !MIN_VERSION_base(4,13,0)
+import Data.Semigroup ((<>))
+#endif
 import Data.Text.Lazy.Builder (Builder)
 import qualified Data.Text.Lazy.Builder as Builder
+import qualified Data.Text.Lazy.Builder.Int as Builder
 import Data.Word (Word8)
+import Foreign.C (CInt (CInt))
+import System.IO.Unsafe (unsafePerformIO)
 
 -- $intro
 --
@@ -73,274 +79,305 @@ import Data.Word (Word8)
 -- automatically strip the ANSI escape sequences.
 
 -- | Black foreground.
-black :: Text -> Text
+black :: Builder -> Builder
 black =
-  lift Builder.ANSI.black
+  foreground "30"
 {-# INLINE black #-}
 
 -- | Red foreground.
-red :: Text -> Text
+red :: Builder -> Builder
 red =
-  lift Builder.ANSI.red
+  foreground "31"
 {-# INLINE red #-}
 
 -- | Green foreground.
-green :: Text -> Text
+green :: Builder -> Builder
 green =
-  lift Builder.ANSI.green
+  foreground "32"
 {-# INLINE green #-}
 
 -- | Yellow foreground.
-yellow :: Text -> Text
+yellow :: Builder -> Builder
 yellow =
-  lift Builder.ANSI.yellow
+  foreground "33"
 {-# INLINE yellow #-}
 
 -- | Blue foreground.
-blue :: Text -> Text
+blue :: Builder -> Builder
 blue =
-  lift Builder.ANSI.blue
+  foreground "34"
 {-# INLINE blue #-}
 
 -- | Magenta foreground.
-magenta :: Text -> Text
+magenta :: Builder -> Builder
 magenta =
-  lift Builder.ANSI.magenta
+  foreground "35"
 {-# INLINE magenta #-}
 
 -- | Cyan foreground.
-cyan :: Text -> Text
+cyan :: Builder -> Builder
 cyan =
-  lift Builder.ANSI.cyan
+  foreground "36"
 {-# INLINE cyan #-}
 
 -- | White foreground.
-white :: Text -> Text
+white :: Builder -> Builder
 white =
-  lift Builder.ANSI.white
+  foreground "37"
 {-# INLINE white #-}
 
 -- | Bright black foreground.
-brightBlack :: Text -> Text
+brightBlack :: Builder -> Builder
 brightBlack =
-  lift Builder.ANSI.brightBlack
+  foreground "90"
 {-# INLINE brightBlack #-}
 
 -- | Bright red foreground.
-brightRed :: Text -> Text
+brightRed :: Builder -> Builder
 brightRed =
-  lift Builder.ANSI.brightRed
+  foreground "91"
 {-# INLINE brightRed #-}
 
 -- | Bright green foreground.
-brightGreen :: Text -> Text
+brightGreen :: Builder -> Builder
 brightGreen =
-  lift Builder.ANSI.brightGreen
+  foreground "92"
 {-# INLINE brightGreen #-}
 
 -- | Bright yellow foreground.
-brightYellow :: Text -> Text
+brightYellow :: Builder -> Builder
 brightYellow =
-  lift Builder.ANSI.brightYellow
+  foreground "93"
 {-# INLINE brightYellow #-}
 
 -- | Bright blue foreground.
-brightBlue :: Text -> Text
+brightBlue :: Builder -> Builder
 brightBlue =
-  lift Builder.ANSI.brightBlue
+  foreground "94"
 {-# INLINE brightBlue #-}
 
 -- | Bright magenta foreground.
-brightMagenta :: Text -> Text
+brightMagenta :: Builder -> Builder
 brightMagenta =
-  lift Builder.ANSI.brightMagenta
+  foreground "95"
 {-# INLINE brightMagenta #-}
 
 -- | Bright cyan foreground.
-brightCyan :: Text -> Text
+brightCyan :: Builder -> Builder
 brightCyan =
-  lift Builder.ANSI.brightCyan
+  foreground "96"
 {-# INLINE brightCyan #-}
 
 -- | Bright white foreground.
-brightWhite :: Text -> Text
+brightWhite :: Builder -> Builder
 brightWhite =
-  lift Builder.ANSI.brightWhite
+  foreground "97"
 {-# INLINE brightWhite #-}
 
 -- | RGB foreground.
-rgb :: Word8 -> Word8 -> Word8 -> Text -> Text
+rgb :: Word8 -> Word8 -> Word8 -> Builder -> Builder
 rgb r g b =
-  lift (Builder.ANSI.rgb r g b)
+  foreground ("38;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b)
 {-# INLINE rgb #-}
 
+foreground :: Builder -> Builder -> Builder
+foreground s =
+  surround s "39"
+{-# INLINE foreground #-}
+
 -- | Black background.
-blackBg :: Text -> Text
+blackBg :: Builder -> Builder
 blackBg =
-  lift Builder.ANSI.blackBg
+  background "40"
 {-# INLINE blackBg #-}
 
 -- | Red background.
-redBg :: Text -> Text
+redBg :: Builder -> Builder
 redBg =
-  lift Builder.ANSI.redBg
+  background "41"
 {-# INLINE redBg #-}
 
 -- | Green background.
-greenBg :: Text -> Text
+greenBg :: Builder -> Builder
 greenBg =
-  lift Builder.ANSI.greenBg
+  background "42"
 {-# INLINE greenBg #-}
 
 -- | Yellow background.
-yellowBg :: Text -> Text
+yellowBg :: Builder -> Builder
 yellowBg =
-  lift Builder.ANSI.yellowBg
+  background "43"
 {-# INLINE yellowBg #-}
 
 -- | Blue background.
-blueBg :: Text -> Text
+blueBg :: Builder -> Builder
 blueBg =
-  lift Builder.ANSI.blueBg
+  background "44"
 {-# INLINE blueBg #-}
 
 -- | Magenta background.
-magentaBg :: Text -> Text
+magentaBg :: Builder -> Builder
 magentaBg =
-  lift Builder.ANSI.magentaBg
+  background "45"
 {-# INLINE magentaBg #-}
 
 -- | Cyan background.
-cyanBg :: Text -> Text
+cyanBg :: Builder -> Builder
 cyanBg =
-  lift Builder.ANSI.cyanBg
+  background "46"
 {-# INLINE cyanBg #-}
 
 -- | White background.
-whiteBg :: Text -> Text
+whiteBg :: Builder -> Builder
 whiteBg =
-  lift Builder.ANSI.whiteBg
+  background "47"
 {-# INLINE whiteBg #-}
 
 -- | Bright black background.
-brightBlackBg :: Text -> Text
+brightBlackBg :: Builder -> Builder
 brightBlackBg =
-  lift Builder.ANSI.brightBlackBg
+  background "100"
 {-# INLINE brightBlackBg #-}
 
 -- | Bright red background.
-brightRedBg :: Text -> Text
+brightRedBg :: Builder -> Builder
 brightRedBg =
-  lift Builder.ANSI.brightRedBg
+  background "101"
 {-# INLINE brightRedBg #-}
 
 -- | Bright green background.
-brightGreenBg :: Text -> Text
+brightGreenBg :: Builder -> Builder
 brightGreenBg =
-  lift Builder.ANSI.brightGreenBg
+  background "102"
 {-# INLINE brightGreenBg #-}
 
 -- | Bright yellow background.
-brightYellowBg :: Text -> Text
+brightYellowBg :: Builder -> Builder
 brightYellowBg =
-  lift Builder.ANSI.brightYellowBg
+  background "103"
 {-# INLINE brightYellowBg #-}
 
 -- | Bright blue background.
-brightBlueBg :: Text -> Text
+brightBlueBg :: Builder -> Builder
 brightBlueBg =
-  lift Builder.ANSI.brightBlueBg
+  background "104"
 {-# INLINE brightBlueBg #-}
 
 -- | Bright magenta background.
-brightMagentaBg :: Text -> Text
+brightMagentaBg :: Builder -> Builder
 brightMagentaBg =
-  lift Builder.ANSI.brightMagentaBg
+  background "105"
 {-# INLINE brightMagentaBg #-}
 
 -- | Bright cyan background.
-brightCyanBg :: Text -> Text
+brightCyanBg :: Builder -> Builder
 brightCyanBg =
-  lift Builder.ANSI.brightCyanBg
+  background "106"
 {-# INLINE brightCyanBg #-}
 
 -- | Bright white background.
-brightWhiteBg :: Text -> Text
+brightWhiteBg :: Builder -> Builder
 brightWhiteBg =
-  lift Builder.ANSI.brightWhiteBg
+  background "107"
 {-# INLINE brightWhiteBg #-}
 
+background :: Builder -> Builder -> Builder
+background s =
+  surround s "49"
+{-# INLINE background #-}
+
 -- | RGB background.
-rgbBg :: Word8 -> Word8 -> Word8 -> Text -> Text
+rgbBg :: Word8 -> Word8 -> Word8 -> Builder -> Builder
 rgbBg r g b =
-  lift (Builder.ANSI.rgbBg r g b)
+  background ("48;2;" <> Builder.decimal r <> semi <> Builder.decimal g <> semi <> Builder.decimal b)
 {-# INLINE rgbBg #-}
 
 -- | __Bold__ style (high intensity).
-bold :: Text -> Text
+bold :: Builder -> Builder
 bold =
-  lift Builder.ANSI.bold
+  surround "1" "22"
 {-# INLINE bold #-}
 
 -- | Faint style (low intensity).
-faint :: Text -> Text
+faint :: Builder -> Builder
 faint =
-  lift Builder.ANSI.faint
+  surround "2" "22"
 {-# INLINE faint #-}
 
 -- | /Italic/ style.
-italic :: Text -> Text
+italic :: Builder -> Builder
 italic =
-  lift Builder.ANSI.italic
+  surround "3" "23"
 {-# INLINE italic #-}
 
 -- | U̲n̲d̲e̲r̲l̲i̲n̲e̲ style.
-underline :: Text -> Text
+underline :: Builder -> Builder
 underline =
-  lift Builder.ANSI.underline
+  surround "4" "24"
 {-# INLINE underline #-}
 
 -- | D̳o̳u̳b̳l̳e̳ ̳u̳n̳d̳e̳r̳l̳i̳n̳e̳ style.
-doubleUnderline :: Text -> Text
+doubleUnderline :: Builder -> Builder
 doubleUnderline =
-  lift Builder.ANSI.doubleUnderline
+  surround "21" "24"
 {-# INLINE doubleUnderline #-}
 
 -- | S̶t̶r̶i̶k̶e̶t̶h̶r̶o̶u̶g̶h̶ style.
-strikethrough :: Text -> Text
+strikethrough :: Builder -> Builder
 strikethrough =
-  lift Builder.ANSI.strikethrough
+  surround "9" "29"
 {-# INLINE strikethrough #-}
 
 -- | Frame style.
-frame :: Text -> Text
+frame :: Builder -> Builder
 frame =
-  lift Builder.ANSI.frame
+  surround "51" "54"
 {-# INLINE frame #-}
 
 -- | Encircle style.
-encircle :: Text -> Text
+encircle :: Builder -> Builder
 encircle =
-  lift Builder.ANSI.encircle
+  surround "52" "54"
 {-# INLINE encircle #-}
 
 -- | O̅v̅e̅r̅l̅i̅n̅e̅ style.
-overline :: Text -> Text
+overline :: Builder -> Builder
 overline =
-  lift Builder.ANSI.overline
+  surround "53" "55"
 {-# INLINE overline #-}
 
---
+--------------------------------------------------------------------------------
 
-lift :: (Builder -> Builder) -> Text -> Text
-lift f =
-  Text.Lazy.toStrict . Builder.toLazyText . f . Builder.fromText
--- Don't inline before phase 2
-{-# NOINLINE [2] lift #-}
+surround :: Builder -> Builder -> Builder -> Builder
+surround open close text
+  | isatty = esc <> open <> m <> text <> esc <> close <> m
+  | otherwise = text
+-- Don't inline before phase 1
+{-# NOINLINE [1] surround #-}
 
--- Collapse lift/lift to a single lift before phase 2
+esc :: Builder
+esc =
+  "\ESC["
+
+m :: Builder
+m =
+  Builder.singleton 'm'
+
+semi :: Builder
+semi =
+  Builder.singleton ';'
+
+isatty :: Bool
+isatty =
+  unsafePerformIO (c_isatty 1) == 1
+{-# NOINLINE isatty #-}
+
+foreign import ccall unsafe "isatty"
+  c_isatty :: CInt -> IO CInt
+
+-- Collapse surround/surround to a single surround before phase 1
 {-# RULES
-"lift/lift" [~2] forall f g s.
-  lift f (lift g s) =
-    lift (f . g) s
+"surround/surround" [~1] forall a b c d s.
+  surround a b (surround c d s) =
+    surround (a <> semi <> c) (b <> semi <> d) s
   #-}
