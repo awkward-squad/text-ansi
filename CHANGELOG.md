@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to the [Haskell Package Versioning Policy](https://pvp.haskell.org/).
 
+## [0.1.1-r1] - 2021-04-17
+
+## Changed
+- Bump `base` upper bound to `< 4.16`
+
 ## [0.1.1] - 2021-01-07
 
 ## Added
