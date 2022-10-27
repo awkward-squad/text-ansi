@@ -1,4 +1,4 @@
-module Data.Text.ANSI
+module Text.ANSI
   ( -- $intro
 
     -- * Foreground color
@@ -53,11 +53,11 @@ module Data.Text.ANSI
 where
 
 import Data.Text (Text)
-import qualified Data.Text.Builder.ANSI as Builder.ANSI
 import qualified Data.Text.Lazy as Text.Lazy
 import Data.Text.Lazy.Builder (Builder)
 import qualified Data.Text.Lazy.Builder as Builder
 import Data.Word (Word8)
+import qualified Text.Builder.ANSI as Builder.ANSI
 
 -- $intro
 --
