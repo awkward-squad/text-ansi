@@ -57,7 +57,7 @@ import qualified Data.Text.Lazy as Text.Lazy
 import Data.Text.Lazy.Builder (Builder)
 import qualified Data.Text.Lazy.Builder as Builder
 import Data.Word (Word8)
-import qualified Text.Builder.ANSI as Builder.ANSI
+import qualified Text.Lazy.Builder.ANSI as Builder.ANSI
 
 -- $intro
 --

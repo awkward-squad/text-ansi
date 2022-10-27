@@ -1,6 +1,7 @@
 ## [0.2.0] - Unreleased
 
 - Drop the `Data` prefix from `Data.Text.ANSI` and `Data.Text.Builder.ANSI` modules
+- Rename `Text.Builder.ANSI` to `Text.Lazy.Builder.ANSI`
 
 ## [0.1.1] - 2021-01-07
 

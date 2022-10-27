@@ -1,6 +1,6 @@
 {-# LANGUAGE CPP #-}
 
-module Text.Builder.ANSI
+module Text.Lazy.Builder.ANSI
   ( -- $intro
 
     -- * Foreground color
