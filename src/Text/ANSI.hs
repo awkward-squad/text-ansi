@@ -53,11 +53,10 @@ module Text.ANSI
 where
 
 import Data.Text (Text)
-import qualified Data.Text.Lazy as Text.Lazy
-import Data.Text.Lazy.Builder (Builder)
-import qualified Data.Text.Lazy.Builder as Builder
 import Data.Word (Word8)
-import qualified Text.Lazy.Builder.ANSI as Builder.ANSI
+import Text.Builder (Builder)
+import qualified Text.Builder as Builder
+import qualified Text.Builder.ANSI as Builder.ANSI
 
 -- $intro
 --
@@ -334,7 +333,7 @@ overline =
 
 lift :: (Builder -> Builder) -> Text -> Text
 lift f =
-  Text.Lazy.toStrict . Builder.toLazyText . f . Builder.fromText
+  Builder.run . f . Builder.text
 -- Don't inline before phase 2
 {-# NOINLINE [2] lift #-}
 
