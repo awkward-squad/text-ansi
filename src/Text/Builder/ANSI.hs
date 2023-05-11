@@ -60,8 +60,8 @@ import Data.Semigroup ((<>))
 import Text.Builder (Builder)
 import qualified Text.Builder as Builder
 import Data.Word (Word8)
-import Foreign.C (CInt (CInt))
 import System.IO.Unsafe (unsafePerformIO)
+import System.Posix.Internals (c_isatty)
 
 -- $intro
 --
@@ -369,9 +369,6 @@ isatty :: Bool
 isatty =
   unsafePerformIO (c_isatty 1) == 1
 {-# NOINLINE isatty #-}
-
-foreign import ccall unsafe "isatty"
-  c_isatty :: CInt -> IO CInt
 
 -- Collapse surround/surround to a single surround before phase 1
 {-# RULES
