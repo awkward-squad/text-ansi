@@ -61,8 +61,8 @@ import Data.Text.Lazy.Builder (Builder)
 import qualified Data.Text.Lazy.Builder as Builder
 import qualified Data.Text.Lazy.Builder.Int as Builder
 import Data.Word (Word8)
-import Foreign.C (CInt (CInt))
 import System.IO.Unsafe (unsafePerformIO)
+import System.Posix.Internals (c_isatty)
 
 -- $intro
 --
@@ -370,9 +370,6 @@ isatty :: Bool
 isatty =
   unsafePerformIO (c_isatty 1) == 1
 {-# NOINLINE isatty #-}
-
-foreign import ccall unsafe "isatty"
-  c_isatty :: CInt -> IO CInt
 
 -- Collapse surround/surround to a single surround before phase 1
 {-# RULES
