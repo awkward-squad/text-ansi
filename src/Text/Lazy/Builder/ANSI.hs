@@ -1,5 +1,3 @@
-{-# LANGUAGE CPP #-}
-
 module Text.Lazy.Builder.ANSI
   ( -- $intro
 
@@ -54,9 +52,6 @@ module Text.Lazy.Builder.ANSI
   )
 where
 
-#if !MIN_VERSION_base(4,13,0)
-import Data.Semigroup ((<>))
-#endif
 import Data.Text.Lazy.Builder (Builder)
 import qualified Data.Text.Lazy.Builder as Builder
 import qualified Data.Text.Lazy.Builder.Int as Builder
