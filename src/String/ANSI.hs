@@ -53,9 +53,9 @@ module String.ANSI
 where
 
 import qualified Data.Text as Text
+import Data.Text.Builder.Linear (Builder)
+import qualified Data.Text.Builder.Linear as Builder
 import Data.Word (Word8)
-import Text.Builder (Builder)
-import qualified Text.Builder as Builder
 import qualified Text.Builder.ANSI as Builder.ANSI
 
 -- $intro
@@ -333,7 +333,7 @@ overline =
 
 lift :: (Builder -> Builder) -> String -> String
 lift f =
-  Text.unpack . Builder.run . f . Builder.string
+  Text.unpack . Builder.runBuilder . f . foldMap Builder.fromChar
 -- Don't inline before phase 2
 {-# NOINLINE [2] lift #-}
 

@@ -53,9 +53,9 @@ module Text.ANSI
 where
 
 import Data.Text (Text)
+import Data.Text.Builder.Linear (Builder)
+import qualified Data.Text.Builder.Linear as Builder
 import Data.Word (Word8)
-import Text.Builder (Builder)
-import qualified Text.Builder as Builder
 import qualified Text.Builder.ANSI as Builder.ANSI
 
 -- $intro
@@ -333,7 +333,7 @@ overline =
 
 lift :: (Builder -> Builder) -> Text -> Text
 lift f =
-  Builder.run . f . Builder.text
+  Builder.runBuilder . f . Builder.fromText
 -- Don't inline before phase 2
 {-# NOINLINE [2] lift #-}
 
