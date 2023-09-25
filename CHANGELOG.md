@@ -10,7 +10,7 @@
 
 ## [0.2.1.1] - 2023-05-11
 
-- [#6](https://github.com/mitchellwrosen/text-ansi/pull/6) Fix Windows linker errors on GHC 9.4.5+
+- [#6](https://github.com/awkward-squad/text-ansi/pull/6) Fix Windows linker errors on GHC 9.4.5+
 
 ## [0.2.1] - 2022-11-05
 
