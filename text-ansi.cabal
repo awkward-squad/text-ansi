@@ -2,6 +2,7 @@ cabal-version: 2.2
 
 name: text-ansi
 version: 0.3.0
+x-revision: 1
 category: Data
 synopsis: Text styling for ANSI terminals.
 description:
@@ -23,7 +24,7 @@ copyright: (c) 2018-2023 Mitchell Rosen, Travis Staton
 license: BSD-3-Clause
 license-file: LICENSE
 build-type: Simple
-tested-with: GHC == 9.2.8, GHC == 9.4.7, GHC == 9.6.2
+tested-with: GHC == 9.4.7, GHC == 9.6.3, GHC == 9.8.1
 
 extra-source-files:
   CHANGELOG.md
@@ -35,7 +36,7 @@ source-repository head
 
 library
   build-depends:
-    base >= 4.16 && < 4.19,
+    base ^>= 4.16 || ^>= 4.17 || ^>= 4.18 || ^>= 4.19,
     text >= 1.0 && < 2.2,
     text-builder-linear ^>= 0.1.1,
   default-language:
