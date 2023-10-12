@@ -1,3 +1,7 @@
+## [0.3.0.1] - 2023-10-12
+
+- Fix broken links to ECMA-48 standard
+
 ## [0.3.0] - 2023-09-24
 
 - Switch the underlying text builder from `text-builder` to `text-builder-linear`. This also affects the API provided by

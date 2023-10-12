@@ -61,7 +61,7 @@ import qualified Text.Builder.ANSI as Builder.ANSI
 -- $intro
 --
 -- Text styling for ANSI terminals using SGR codes, as defined by the
--- <https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf ECMA-48>
+-- <https://www.ecma-international.org/publications-and-standards/standards/ecma-48 ECMA-48>
 -- standard.
 --
 -- Supports foreground\/background color, bold\/faint intensity, italic,
